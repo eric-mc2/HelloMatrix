@@ -1,0 +1,56 @@
+* matrix data class
+* matrix ops class
+* unit tests for c++
+* test against common matrix lib
+* reimplement with openmp or mpi
+* dockerized tests for parallel code
+* use make or cmake to simplify build
+
+* Matrix properties
+	* is A square
+	* is A symmetric
+	* is A invertable
+	* det(A)
+	* C(A)
+	* N(A)
+	* C(AT)
+	* N(AT)
+	* AT
+	* A-1	
+	* rank
+	* use these facts to improve other calculations
+* Matrix matrix multiplication
+	* row by column multiply line by line
+	* [A][|]=[|] linear combo of columns of A
+	* [-][B]=[-] linear combo of rows of B
+	* [|][-]=sum([column j of A][row j of B])
+	* block multiplication:
+		[A1|A2 [B1|B2 = [A1B1+A2B3|A1B2+A2B4
+		 A3|A4] B3|B4]   A3B1+A4B3|A3B2+A4B4]
+* Matrix Vector Multiplication
+	* as matrix matrix multiplication
+	* as dot product of each row of a with x
+	* as linear combination of each column of a
+	* benchmark each way
+* Linear Independence
+	* of a set of vectors
+	* of a set of matrixes
+	* make one sensible and one improved implementation
+* Solve Ax=0
+	* via forward elimination
+* Solve A=LU
+	* via forward elimination
+	* via inveting EA=U
+* Solve A=LDU
+* Implement forward elimination
+	* Can you detect and improve row swapping?
+* Implement back substitution
+* Vector space properties
+	* is set S a vector space?
+	* span of S
+	* basis for S
+	* dimension
+* Matrix decomposition
+	* decompose B into r rank 1 matrixes
+	* decompose each Bi into uvT
+	

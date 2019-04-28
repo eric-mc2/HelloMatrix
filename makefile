@@ -1,14 +1,10 @@
-# compiler flags
-# -g add debug info
-# -Wall enable compiler warnings
-# -I. include current directory
-CFLAGS=-g -Wall -I.
+CXXFLAGS=-g -Wall -std=c++11
 
 src = $(wildcard *.cpp)
 obj = $(src:.cpp=.o)
 
 test: $(obj)
-	g++ -std=c++11 -o $@ $^
+	g++ -o $@ $^
 
 .PHONY: clean
 clean:

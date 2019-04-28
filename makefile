@@ -5,11 +5,11 @@
 CFLAGS=-g -Wall -I.
 
 src = $(wildcard *.cpp)
-obj = $(src:.c=.o)
+obj = $(src:.cpp=.o)
 
 test: $(obj)
 	g++ -std=c++11 -o $@ $^
 
 .PHONY: clean
 clean:
-	rm -f $(obj) all
+	rm -f $(obj) test

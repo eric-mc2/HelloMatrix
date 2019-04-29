@@ -1,2 +1,6 @@
+# compilation target for test executable
 test
+# object files
 *.o
+# test output
+core.*

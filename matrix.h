@@ -5,12 +5,18 @@
 class Matrix {
 public:
     Matrix(int m, int n);
+    Matrix(const Matrix& other);
     // TODO can we disable the default constructor Matrix()?
     ~Matrix();
     
     std::string shape(); // todo make 'this' const
+    int nrows();
+    int ncols();
+    int get(int i, int j);
+    void set(int i, int j, int val); //XXX can we do this with operator[] without exposing the whole column array?
     
-    Matrix operator+=(Matrix);
+    Matrix& operator=(const Matrix& rhs);
+    Matrix& operator+=(Matrix);
     Matrix operator-=(Matrix);
     Matrix operator*=(int);
     Matrix operator/=(int);

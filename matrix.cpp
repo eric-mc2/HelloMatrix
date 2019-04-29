@@ -9,6 +9,13 @@ Matrix::Matrix(int m, int n) : m{m}, n{n} {
             cols[i] = new int[m];
         }
     }
+    
+Matrix::~Matrix() {
+	 for (int i = 0; i < n; i++){
+            delete cols[i];
+     }
+     delete cols;
+}
 
 std::string Matrix::shape() {
 	return std::to_string(m) + "x" + std::to_string(n);

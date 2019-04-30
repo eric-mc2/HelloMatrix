@@ -8,6 +8,9 @@ Matrix::Matrix(int m, int n) : m{m}, n{n}
 	cols = new int*[n];
     for (int j = 0; j < n; j++){
     	cols[j] = new int[m];
+    	for (int i = 0; i < m; i ++) {
+    		cols[j][i] = 0;
+    	}
     }
 }
 
@@ -42,6 +45,9 @@ Matrix& Matrix::operator=(const Matrix& rhs){
      	cols = new int*[n];
         for (int j = 0; j < n; j++){
             cols[j] = new int[m];
+            for (int i = 0; i < m; i ++) {
+            	cols[j][i] = rhs.cols[j][i];
+            }
         }
 	}
 	return (*this);

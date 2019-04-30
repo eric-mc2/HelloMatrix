@@ -6,14 +6,34 @@ TEST_CASE("constructor") {
 	Matrix mat(1,1);
 	std::string expected = "1x1";
     REQUIRE(0 == expected.compare(mat.shape()));
+    REQUIRE(0 == mat.get(0,0)); // initializes to zero.
 }
 TEST_CASE("copy constructor"){
 	Matrix a(1,1);
 	a.set(0,0,42);
 	Matrix b(a);
-	REQUIRE(42 == b.get(0,0));
+	REQUIRE(42 == b.get(0,0)); // initializes to rhs
 	a.set(0,0,43);
-	REQUIRE(42 == b.get(0,0));
+	REQUIRE(42 == b.get(0,0)); // points to different obj
+}
+TEST_CASE("assignment operator"){
+	Matrix a(2,3);
+	a.set(1,2,42);
+	Matrix b(1,1);
+	b.set(0,0,43);
+	SECTION("assert data copied") {
+		b = a;
+		REQUIRE(2 == b.nrows());
+		REQUIRE(3 == b.ncols());
+		REQUIRE(0 == b.get(0,0));
+		REQUIRE(42 == b.get(1,2));
+	}
+	SECTION("points to different obj") {
+		Matrix c(1,1);
+		c = b;
+		b = a; // destroys b's data
+		c.get(0,0); // if c points to new data, this wont crash
+	}
 }
 TEST_CASE("can get set"){
 	Matrix m(2,5);

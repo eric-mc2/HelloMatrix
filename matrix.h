@@ -5,8 +5,8 @@
 class Matrix {
 public:
     Matrix(int m, int n);
+    Matrix(std::initializer_list<std::initializer_list<int>> col_lst);
     Matrix(const Matrix& other);
-    // TODO can we disable the default constructor Matrix()?
     ~Matrix();
     
     std::string shape() const;

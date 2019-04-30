@@ -8,6 +8,32 @@ TEST_CASE("constructor") {
     REQUIRE(0 == expected.compare(mat.shape()));
     REQUIRE(0 == mat.get(0,0)); // initializes to zero.
 }
+TEST_CASE("list constructor"){
+	Matrix dummy(1,1);
+	SECTION("good"){
+		Matrix eye {{1,0,0},{0,1,0},{0,0,1}};
+		std::string expected = "3x3";
+    	REQUIRE(0 == expected.compare(eye.shape()));
+    	for (int i = 0; i < 3; i++){
+    		for (int j = 0; j < 3; j++) {
+    			if (i == j){
+    				REQUIRE(1 == eye.get(i,j));
+    			} else {
+    				REQUIRE(0 == eye.get(i,j));
+    			}
+    		}
+    	}
+	}
+	SECTION("empty list"){
+		REQUIRE_THROWS((Matrix {}));
+	}
+	SECTION("empty row"){
+		REQUIRE_THROWS(Matrix {{}});
+	}
+	SECTION("unequal columns") {
+		REQUIRE_THROWS(Matrix {{1,2},{1,2,3}});
+	}
+}
 TEST_CASE("copy constructor"){
 	Matrix a(1,1);
 	a.set(0,0,42);
@@ -35,7 +61,7 @@ TEST_CASE("assignment operator"){
 		c.get(0,0); // if c points to new data, this wont crash
 	}
 }
-TEST_CASE("can get set"){
+TEST_CASE("getter and setter"){
 	Matrix m(2,5);
 	SECTION("negative row"){
 		REQUIRE_THROWS(m.get(-1,2));
@@ -65,7 +91,7 @@ TEST_CASE("can get set"){
 		REQUIRE(9 == m.get(1,4));
 	}
 }
-TEST_CASE("plus equals") {
+TEST_CASE("addition operator") {
 	Matrix a(1,1);
 	SECTION("cant add different heights"){
 		Matrix b(2,1);
@@ -76,9 +102,26 @@ TEST_CASE("plus equals") {
 		REQUIRE_THROWS(a += b);
 	}
 	SECTION("can add same shape"){
-		Matrix b(1,1);
-		b.set(0,0,2);
-		REQUIRE_NOTHROW(a += b);
-		REQUIRE(2 == a.get(0,0));
+		Matrix b(2,3);
+		Matrix c(2,3);
+		b.set(0,0,42);
+		b.set(0,1,42);
+		b.set(0,2,42);
+		b.set(1,0,42);
+		b.set(1,1,42);
+		b.set(1,2,42);
+		c.set(0,0,2);
+		c.set(0,1,4);
+		c.set(0,2,6);
+		c.set(1,0,8);
+		c.set(1,1,10);
+		c.set(1,2,12);
+		REQUIRE_NOTHROW(c += b);
+		REQUIRE(44 == c.get(0,0));
+		REQUIRE(46 == c.get(0,1));
+		REQUIRE(48 == c.get(0,2));
+		REQUIRE(50 == c.get(1,0));
+		REQUIRE(52 == c.get(1,1));
+		REQUIRE(54 == c.get(1,2));
 	}
 }

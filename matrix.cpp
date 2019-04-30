@@ -123,3 +123,25 @@ Matrix& Matrix::operator-=(const Matrix& rhs){
 	}
 	return *this;
 }
+
+bool Matrix::operator==(const Matrix& other) const {
+	if (this == &other) return true;
+	if (this->n != other.n || this->m != other.m) return false;
+	for (int j = 0; j < n; j++){
+		for (int i = 0; i < m; i ++) {
+			if (this->cols[j][i] != other.cols[j][i]) return false;
+		}
+	}
+	return true;
+}
+
+bool Matrix::operator!=(const Matrix& other) const{
+	if (this == &other) return false;
+	if (this->n != other.n || this->m != other.m) return true;
+	for (int j = 0; j < n; j++){
+		for (int i = 0; i < m; i ++) {
+			if (this->cols[j][i] != other.cols[j][i]) return true;
+		}
+	}
+	return false;
+}

@@ -159,3 +159,65 @@ TEST_CASE("subtraction assignment operator") {
 		REQUIRE(30 == b.get(1,2));
 	}
 }
+TEST_CASE("equality operator"){
+	Matrix a {{0,0}};
+	SECTION("different shape"){
+		Matrix b {{0},{0}};
+		REQUIRE_FALSE(a==b);
+		REQUIRE_FALSE(b==a);
+	}
+	SECTION("via copy constructor"){
+		Matrix b(a);
+		REQUIRE(a==b);
+		REQUIRE(b==a);
+	}
+	SECTION("via assignment"){
+		Matrix b(3,3);
+		b = a;
+		REQUIRE(a==b);
+		REQUIRE(b==a);
+	}
+	SECTION("different values"){
+		Matrix b{{0,1}};
+		REQUIRE_FALSE(a==b);
+		REQUIRE_FALSE(b==a);
+	}
+	SECTION("same values"){
+		Matrix b{{1,0},{0,1}};
+		Matrix c{{1,0},{0,0}};
+		c.set(1,1,1);
+		REQUIRE(b==c);
+		REQUIRE(c==b);
+	}
+}
+TEST_CASE("inequality operator"){
+	Matrix a {{0,0}};
+	SECTION("different shape"){
+		Matrix b {{0},{0}};
+		REQUIRE(a!=b);
+		REQUIRE(b!=a);
+	}
+	SECTION("via copy constructor"){
+		Matrix b(a);
+		REQUIRE_FALSE(a!=b);
+		REQUIRE_FALSE(b!=a);
+	}
+	SECTION("via assignment"){
+		Matrix b(3,3);
+		b = a;
+		REQUIRE_FALSE(a!=b);
+		REQUIRE_FALSE(b!=a);
+	}
+	SECTION("different values"){
+		Matrix b{{0,1}};
+		REQUIRE(a!=b);
+		REQUIRE(b!=a);
+	}
+	SECTION("same values"){
+		Matrix b{{1,0},{0,1}};
+		Matrix c{{1,0},{0,0}};
+		c.set(1,1,1);
+		REQUIRE_FALSE(b!=c);
+		REQUIRE_FALSE(c!=b);
+	}
+}

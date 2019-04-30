@@ -24,8 +24,8 @@ public:
     const Matrix operator*(const Matrix &other);
     // TODO: static Matrix transp(Matrix);
     // TODO: static Matrix inv(Matrix);
-    bool operator==(const Matrix &other);
-    bool operator!=(const Matrix &other);
+    bool operator==(const Matrix &other) const;
+    bool operator!=(const Matrix &other) const;
     
 private:
     int **cols;

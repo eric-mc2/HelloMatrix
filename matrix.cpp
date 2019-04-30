@@ -11,14 +11,6 @@ Matrix::Matrix(int m, int n) : m{m}, n{n}
     }
 }
 
-Matrix::Matrix(const Matrix& other) {
-	for (int j = 0; j < n; j++){
-        delete cols[j];
-    }
-    delete cols;
-    (*this) = other;
-}
-    
 Matrix::~Matrix() {
 	 for (int j = 0; j < n; j++){
             delete cols[j];
@@ -26,15 +18,40 @@ Matrix::~Matrix() {
      delete cols;
 }
 
-std::string Matrix::shape() {
+Matrix::Matrix(const Matrix& other) {
+	n = other.n;
+	m = other.m;
+	cols = new int*[n];
+	for (int j = 0; j < n; j++) {
+		cols[j] = new int[m];
+	}
+}
+    
+Matrix& Matrix::operator=(const Matrix& rhs){
+	if (this != &rhs){
+		for (int j = 0; j < n; j++){
+            delete cols[j];
+     	}
+     	delete cols;
+     	m = rhs.m;
+     	n = rhs.n;
+     	cols = new int*[n];
+        for (int j = 0; j < n; j++){
+            cols[j] = new int[m];
+        }
+	}
+	return (*this);
+}
+
+std::string Matrix::shape() const{
 	return std::to_string(m) + "x" + std::to_string(n);
 }
 
-int Matrix::nrows(){
+int Matrix::nrows() const{
 	return m;
 }
 
-int Matrix::ncols(){
+int Matrix::ncols() const{
 	return n;
 }
 
@@ -48,23 +65,7 @@ void Matrix::set(int i, int j, int val){
 	cols[j][i] = val;
 }
 
-Matrix& Matrix::operator=(const Matrix& rhs){
-	if (this != &rhs){
-		for (int j = 0; j < n; j++){
-            delete cols[j];
-     	}
-     	delete cols;
-     	m = rhs->m;
-     	n = rhs->n;
-     	cols = new int*[n];
-        for (int j = 0; j < n; j++){
-            cols[j] = new int[m];
-        }
-	}
-	return (*this);
-}
-
-Matrix Matrix::operator+=(Matrix other){
-	if (other.nrows() != m || other.ncols() != n) throw std::length_error("must have same shape");
+Matrix& Matrix::operator+=(const Matrix& rhs){
+	if (rhs.nrows() != m || rhs.ncols() != n) throw std::length_error("must have same shape");
 	return *this;
 }

@@ -24,10 +24,14 @@ Matrix::Matrix(const Matrix& other) {
 	cols = new int*[n];
 	for (int j = 0; j < n; j++) {
 		cols[j] = new int[m];
+		for (int i = 0; i < m; i ++) {
+			cols[j][i] = other.cols[j][i];
+		}
 	}
 }
     
 Matrix& Matrix::operator=(const Matrix& rhs){
+	// TODO: This probably still isn't exception-safe
 	if (this != &rhs){
 		for (int j = 0; j < n; j++){
             delete cols[j];

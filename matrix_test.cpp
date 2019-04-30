@@ -7,6 +7,14 @@ TEST_CASE("constructor") {
 	std::string expected = "1x1";
     REQUIRE(0 == expected.compare(mat.shape()));
 }
+TEST_CASE("copy constructor"){
+	Matrix a(1,1);
+	a.set(0,0,42);
+	Matrix b(a);
+	REQUIRE(42 == b.get(0,0));
+	a.set(0,0,43);
+	REQUIRE(42 == b.get(0,0));
+}
 TEST_CASE("can get set"){
 	Matrix m(2,5);
 	SECTION("negative row"){

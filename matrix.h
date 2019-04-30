@@ -17,9 +17,8 @@ public:
     
     Matrix& operator=(const Matrix& rhs);
     Matrix& operator+=(const Matrix& rhs);
-    Matrix operator-=(Matrix);
+    Matrix& operator-=(const Matrix& rhs);
     Matrix operator*=(int);
-    Matrix operator/=(int);
     const Matrix operator+(const Matrix &other);
     const Matrix operator-(const Matrix &other);
     const Matrix operator*(const Matrix &other);

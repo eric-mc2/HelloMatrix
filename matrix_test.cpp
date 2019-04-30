@@ -91,7 +91,7 @@ TEST_CASE("getter and setter"){
 		REQUIRE(9 == m.get(1,4));
 	}
 }
-TEST_CASE("addition operator") {
+TEST_CASE("addition assignment operator") {
 	Matrix a(1,1);
 	SECTION("cant add different heights"){
 		Matrix b(2,1);
@@ -123,5 +123,39 @@ TEST_CASE("addition operator") {
 		REQUIRE(50 == c.get(1,0));
 		REQUIRE(52 == c.get(1,1));
 		REQUIRE(54 == c.get(1,2));
+	}
+}
+TEST_CASE("subtraction assignment operator") {
+	Matrix a(1,1);
+	SECTION("cant subtract different heights"){
+		Matrix b(2,1);
+		REQUIRE_THROWS(a -= b);
+	}
+	SECTION("cant subtract different widths"){
+		Matrix b(1,2);
+		REQUIRE_THROWS(a -= b);
+	}
+	SECTION("can subtract same shape"){
+		Matrix b(2,3);
+		Matrix c(2,3);
+		b.set(0,0,42);
+		b.set(0,1,42);
+		b.set(0,2,42);
+		b.set(1,0,42);
+		b.set(1,1,42);
+		b.set(1,2,42);
+		c.set(0,0,2);
+		c.set(0,1,4);
+		c.set(0,2,6);
+		c.set(1,0,8);
+		c.set(1,1,10);
+		c.set(1,2,12);
+		REQUIRE_NOTHROW(b -= c);
+		REQUIRE(40 == b.get(0,0));
+		REQUIRE(38 == b.get(0,1));
+		REQUIRE(36 == b.get(0,2));
+		REQUIRE(34 == b.get(1,0));
+		REQUIRE(32 == b.get(1,1));
+		REQUIRE(30 == b.get(1,2));
 	}
 }

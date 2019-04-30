@@ -31,7 +31,7 @@ Matrix::Matrix(std::initializer_list<std::initializer_list<int>> col_lst){
 	for (auto col : col_lst) {
 		if (m == -1) m = col.size();
 		if (m == 0) throw std::invalid_argument("must provide at least one row");
-		if (m != col.size()) throw std::invalid_argument("columns must all have same size");
+		if (static_cast<unsigned int>(m) != col.size()) throw std::invalid_argument("columns must all have same size");
 	}
 	cols = new int*[n];
 	int j = 0;
@@ -107,6 +107,18 @@ Matrix& Matrix::operator+=(const Matrix& rhs){
 	for (int j = 0; j < n; j ++) {
 		for (int i = 0; i < m; i ++) {
 			cols[j][i] += rhs.cols[j][i];
+		}
+	}
+	return *this;
+}
+
+Matrix& Matrix::operator-=(const Matrix& rhs){
+	if (rhs.nrows() != m || rhs.ncols() != n) {
+		throw std::length_error("must have same shape");
+	}
+	for (int j = 0; j < n; j ++) {
+		for (int i = 0; i < m; i ++) {
+			cols[j][i] -= rhs.cols[j][i];
 		}
 	}
 	return *this;

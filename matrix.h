@@ -18,14 +18,16 @@ public:
     Matrix& operator=(const Matrix& rhs);
     Matrix& operator+=(const Matrix& rhs);
     Matrix& operator-=(const Matrix& rhs);
-    Matrix operator*=(int);
+    Matrix& operator*=(int c);
     const Matrix operator+(const Matrix &other);
     const Matrix operator-(const Matrix &other);
     const Matrix operator*(const Matrix &other);
+    const Matrix operator*(int c);
     // TODO: static Matrix transp(Matrix);
     // TODO: static Matrix inv(Matrix);
     bool operator==(const Matrix &other) const;
     bool operator!=(const Matrix &other) const;
+    friend std::ostream& operator<<(std::ostream &os, Matrix &rhs);
     
 private:
     int **cols;

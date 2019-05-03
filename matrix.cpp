@@ -139,6 +139,47 @@ Matrix& Matrix::operator-=(const Matrix& rhs){
 	return *this;
 }
 
+Matrix& Matrix::operator*=(int c) {
+	for (int j = 0; j < n; j ++) {
+		for (int i = 0; i < m; i ++) {
+			cols[j][i] *= c;
+		}
+	}
+	return *this;
+}
+
+const Matrix Matrix::operator+(const Matrix &other) {
+	Matrix rtn(*this);
+	rtn += other;
+	return rtn;
+}
+
+const Matrix Matrix::operator-(const Matrix &other) {
+	Matrix rtn(*this);
+	rtn -= other;
+	return rtn;
+}
+
+const Matrix Matrix::operator*(const Matrix &other) {
+	if (this->n != other.m) throw std::length_error("mismatched shape for matrix multiplication");
+	Matrix rtn(this->m, other.n);
+	for (int j = 0; j < rtn.n; j ++){
+		for (int i = 0; i < rtn.m; i++) {
+			for (int k = 0; k < this->n; k ++){
+				rtn.cols[j][i] += this->cols[k][i] * other.cols[j][k];
+			}
+		}
+	}
+	return rtn;
+}
+
+const Matrix Matrix::operator*(int c) {
+	Matrix rtn(*this);
+	rtn *= c;
+	return rtn;
+}
+
+
 bool Matrix::operator==(const Matrix& other) const {
 	if (this == &other) return true;
 	if (this->n != other.n || this->m != other.m) return false;
@@ -160,3 +201,17 @@ bool Matrix::operator!=(const Matrix& other) const{
 	}
 	return false;
 }
+
+std::ostream& operator<<(std::ostream &os, Matrix &rhs) {
+	os << "[";
+	for (int j = 0; j < rhs.n; j ++){
+		os << "[";
+		for (int i = 0; i < rhs.m; i++){
+			os << std::to_string(rhs.cols[j][i]) << (i == rhs.m-1 ? "" : ",");
+		}
+		os << (j==rhs.n-1 ? "]" : "],");
+	}
+	os << "]";
+	return os;
+}
+

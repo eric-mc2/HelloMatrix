@@ -165,6 +165,70 @@ TEST_CASE("subtraction assignment operator") {
 		REQUIRE(30 == b.get(1,2));
 	}
 }
+TEST_CASE("scalar multiplication assignment operator"){
+	Matrix a(2,3);
+	Matrix b(2,3);
+	a*=3;
+	REQUIRE(a == b);
+	Matrix c({{1,1},{1,1},{1,1}});
+	c*=0;
+	REQUIRE(c == b);
+	Matrix d({{1,0},{0,1}});
+	d*=3;
+	Matrix e({{3,0},{0,3}});
+	REQUIRE(d == e);
+	Matrix f({{-3,0},{0,-3}});
+	d*=-1;
+	REQUIRE(d == f);
+}
+TEST_CASE("addition operator"){
+	Matrix a(2,2);
+	Matrix b = a+a;
+	REQUIRE(b == a);
+	Matrix c({{1,2,3},{4,5,6}});
+	Matrix d({{-1,-1,-1},{-1,-1,-1}});
+	Matrix e({{0,1,2},{3,4,5}});
+	REQUIRE (e == (c+d));
+	REQUIRE_THROWS(a+c);
+}
+TEST_CASE("subtraction operator"){
+	Matrix a(2,2);
+	Matrix b = a-a;
+	REQUIRE(b == a);
+	Matrix c({{1,2,3},{4,5,6}});
+	Matrix d({{-1,-1,-1},{-1,-1,-1}});
+	Matrix e({{0,1,2},{3,4,5}});
+	REQUIRE ((e-d) == c);
+	REQUIRE_THROWS(a-c);
+}
+TEST_CASE("matrix multiplication operator"){
+	Matrix a(2,2);
+	Matrix b(2,1);
+	REQUIRE_NOTHROW(a*b);
+	REQUIRE_THROWS(b*a);
+	Matrix eye({{1,0,0},{0,1,0},{0,0,1}});
+	Matrix c({{2,4,6},{1,0,2},{0,2,5}});
+	REQUIRE (c == (eye*c));
+	REQUIRE (c == (c*eye));
+	Matrix p({{0,1,0},{1,0,0},{0,0,1}});
+	Matrix d({{1,0,2},{2,4,6},{0,2,5}});
+	Matrix foo = (p*d);
+	std::cout << foo << "\n";
+	REQUIRE (c == p*d);
+	REQUIRE (c != d*p);
+}
+TEST_CASE("scalar multiplication operator"){
+	Matrix a(4,5);
+	Matrix b = a * 22;
+	REQUIRE(a == b);
+	Matrix c({{1,2},{3,4}});
+	Matrix e({{5,10},{15,20}});
+	Matrix d = c * 5;
+	REQUIRE(d == e);
+	Matrix f(2,2);
+	Matrix g = d*0;
+	REQUIRE(f == g);
+}
 TEST_CASE("equality operator"){
 	Matrix a {{0,0}};
 	SECTION("different shape"){

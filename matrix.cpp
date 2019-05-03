@@ -6,20 +6,30 @@
 Matrix::Matrix(int m, int n) : m{m}, n{n} 
 {
 	if (m <= 0 || n <= 0) throw std::invalid_argument("m and n must be positive");
-	cols = new int*[n];
-    for (int j = 0; j < n; j++){
-    	cols[j] = new int[m];
-    	for (int i = 0; i < m; i ++) {
-    		cols[j][i] = 0;
+	int j = 0;
+	try {
+		cols = new int*[n];
+    	for (; j < n; j++){
+    		cols[j] = new int[m];
+    		for (int i = 0; i < m; i ++) {
+    			cols[j][i] = 0;
+    		}
     	}
-    }
+	} catch (std::bad_alloc e) {
+		for (--j; j >= 0; j--){
+			delete cols[j];
+		}
+		delete cols;
+	}
 }
 
 Matrix::~Matrix() {
-	 for (int j = 0; j < n; j++){
+	if (cols != nullptr) {
+	 	for (int j = 0; j < n; j++){
             delete cols[j];
-     }
-     delete cols;
+     	}
+    	delete cols;
+ 	}
 }
 
 Matrix::Matrix(std::initializer_list<std::initializer_list<int>> col_lst){
@@ -33,45 +43,53 @@ Matrix::Matrix(std::initializer_list<std::initializer_list<int>> col_lst){
 		if (m == 0) throw std::invalid_argument("must provide at least one row");
 		if (static_cast<unsigned int>(m) != col.size()) throw std::invalid_argument("columns must all have same size");
 	}
-	cols = new int*[n];
 	int j = 0;
-	for (auto col : col_lst) {
-		cols[j] = new int[m];
-		std::copy(col.begin(), col.end(), cols[j]);
-		j++;
+	try {
+		cols = new int*[n];
+		for (auto col : col_lst) {
+			cols[j] = new int[m];
+			std::copy(col.begin(), col.end(), cols[j]);
+			j++;
+		}
+	} catch (std::bad_alloc e){
+		for (--j; j >= 0; j--) {
+			delete cols[j];
+		}
+		delete cols;
 	}
 }
 
 Matrix::Matrix(const Matrix& other) {
-	n = other.n;
-	m = other.m;
-	cols = new int*[n];
-	for (int j = 0; j < n; j++) {
-		cols[j] = new int[m];
-		for (int i = 0; i < m; i ++) {
-			cols[j][i] = other.cols[j][i];
+	cols = nullptr;
+	Matrix tmp(other.m, other.n);
+	for (int j = 0; j < other.n; j++) {
+		for (int i = 0; i < other.m; i ++) {
+			tmp.cols[j][i] = other.cols[j][i];
 		}
 	}
+	tmp.swap(*this);
 }
     
 Matrix& Matrix::operator=(const Matrix& rhs){
-	// TODO: This probably still isn't exception-safe
 	if (this != &rhs){
-		for (int j = 0; j < n; j++){
-            delete cols[j];
-     	}
-     	delete cols;
-     	m = rhs.m;
-     	n = rhs.n;
-     	cols = new int*[n];
-        for (int j = 0; j < n; j++){
-            cols[j] = new int[m];
-            for (int i = 0; i < m; i ++) {
-            	cols[j][i] = rhs.cols[j][i];
-            }
-        }
+		Matrix tmp(rhs);
+		tmp.swap(*this);
 	}
 	return (*this);
+}
+
+void Matrix::swap(Matrix& other){
+	int ti = n;
+	n = other.n;
+	other.n = ti;
+	
+	ti = m;
+	m = other.m;
+	other.m = ti;
+	
+	int** tp = cols;
+	cols = other.cols;
+	other.cols = tp;
 }
 
 std::string Matrix::shape() const{

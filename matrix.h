@@ -30,6 +30,7 @@ public:
 private:
     int **cols;
     int m, n;
+    void swap(Matrix &other);
 };
 
 #endif

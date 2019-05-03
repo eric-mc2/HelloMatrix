@@ -3,10 +3,16 @@
 #include "matrix.h"
 
 TEST_CASE("constructor") {
-	Matrix mat(1,1);
-	std::string expected = "1x1";
-    REQUIRE(0 == expected.compare(mat.shape()));
-    REQUIRE(0 == mat.get(0,0)); // initializes to zero.
+	SECTION("normal") {
+		Matrix mat(1,1);
+		std::string expected = "1x1";
+    	REQUIRE(0 == expected.compare(mat.shape()));
+    	REQUIRE(0 == mat.get(0,0)); // initializes to zero.
+	}
+	SECTION("huge malloc") {
+// 		// TODO how do we test exception safety of constructor? c++ just kills the program
+		REQUIRE_NOTHROW(Matrix(4500,100000));
+	}
 }
 TEST_CASE("list constructor"){
 	Matrix dummy(1,1);

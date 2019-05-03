@@ -1,4 +1,5 @@
 #include <string>
+#include <iostream>
 #include <exception>
 #include <initializer_list>
 #include "matrix.h"
@@ -16,8 +17,10 @@ Matrix::Matrix(int m, int n) : m{m}, n{n}
     		}
     	}
 	} catch (std::bad_alloc e) {
-		for (--j; j >= 0; j--){
-			delete cols[j];
+		std::cerr << "malloc failed on column " << std::to_string(j);
+		for (int d = 0; d < j; d++){
+			// i.e. if malloc fails at j=2 we must only free columns 0 and 1.
+			delete cols[d];
 		}
 		delete cols;
 	}
@@ -35,6 +38,7 @@ Matrix::~Matrix() {
 Matrix::Matrix(std::initializer_list<std::initializer_list<int>> col_lst){
 	n = col_lst.size();
 	m = -1;
+	cols = nullptr;
 	if (n == 0) {
 		throw std::invalid_argument("must provide at least one column");
 	}
@@ -43,20 +47,13 @@ Matrix::Matrix(std::initializer_list<std::initializer_list<int>> col_lst){
 		if (m == 0) throw std::invalid_argument("must provide at least one row");
 		if (static_cast<unsigned int>(m) != col.size()) throw std::invalid_argument("columns must all have same size");
 	}
+	Matrix tmp(m, n);
 	int j = 0;
-	try {
-		cols = new int*[n];
-		for (auto col : col_lst) {
-			cols[j] = new int[m];
-			std::copy(col.begin(), col.end(), cols[j]);
-			j++;
-		}
-	} catch (std::bad_alloc e){
-		for (--j; j >= 0; j--) {
-			delete cols[j];
-		}
-		delete cols;
+	for (auto col : col_lst) {
+		std::copy(col.begin(), col.end(), tmp.cols[j]);
+		j++;
 	}
+	tmp.swap(*this);
 }
 
 Matrix::Matrix(const Matrix& other) {

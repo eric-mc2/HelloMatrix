@@ -1,29 +1,4 @@
-Project Layout:
-/
-- maybe a makefile will go here
-- maybe a gitignore will go here
-- maybe CMake to create our
-/bin/
-    - executables compiled to here
-/build/
-    - object files compiled to here
-/doc/
-    - documentation
-/include/
-    /projectname/
-        - header file for exposing public api
-/lib/
-    - third party libraries
-    - (c++ libs are included as source??)
-    - (is there no maven for c++?)
-/src/
-    - headers for private + protected code
-    - source code
-/test/
-    - tests
-    
-Compiling & Linking:
-    Suppose main.cpp requires a.cpp and b.cpp.
-    g++ -c *.cpp # compiling
-    g++ *.o -o binary # linking
-    
+This project implements basic matrix and linear algebra operations.
+My goal in writing it is to learn C++ and to reinforce the material from an intro to linear algebra course.
+A secondary goal is to think about parallelism and to learn MPI.
+A non-goal is to beat the standard libraries like BLAS. Of course they will be miles better.

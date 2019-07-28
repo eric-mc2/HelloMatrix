@@ -1,22 +1,18 @@
-* matrix data class
-* matrix ops class
-* unit tests for c++
 * test against common matrix lib
 * reimplement with openmp or mpi
 * dockerized tests for parallel code
 * use make or cmake to simplify build
+* refactor according to Google Style Guide: https://google.github.io/styleguide/cppguide.html
 
 * Matrix properties
-	* is A square
-	* is A symmetric
 	* is A invertable
 	* det(A)
 	* C(A)
 	* N(A)
 	* C(AT)
 	* N(AT)
-	* AT
-	* A-1	
+	* AT (transpose)
+	* A-1 (inverse)
 	* rank
 	* use these facts to improve other calculations
 * Matrix matrix multiplication

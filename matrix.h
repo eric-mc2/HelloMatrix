@@ -14,6 +14,11 @@ public:
     int ncols() const;
     int get(int i, int j);
     void set(int i, int j, int val); //XXX can we do this with operator[] without exposing the whole column array?
+    bool issquare() const;
+    bool issymmetric() const;
+    
+    static Matrix T(const Matrix& other);
+    Matrix T(); // Transpose
     
     Matrix& operator=(const Matrix& rhs);
     Matrix& operator+=(const Matrix& rhs);
@@ -23,7 +28,6 @@ public:
     const Matrix operator-(const Matrix &other);
     const Matrix operator*(const Matrix &other);
     const Matrix operator*(int c);
-    // TODO: static Matrix transp(Matrix);
     // TODO: static Matrix inv(Matrix);
     bool operator==(const Matrix &other) const;
     bool operator!=(const Matrix &other) const;

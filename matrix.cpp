@@ -4,6 +4,8 @@
 #include <initializer_list>
 #include "matrix.h"
 
+// ---- CONSTRUCTORS ------
+
 Matrix::Matrix(int m, int n) : m{m}, n{n} 
 {
 	if (m <= 0 || n <= 0) throw std::invalid_argument("m and n must be positive");
@@ -66,14 +68,8 @@ Matrix::Matrix(const Matrix& other) {
 	}
 	tmp.swap(*this);
 }
-    
-Matrix& Matrix::operator=(const Matrix& rhs){
-	if (this != &rhs){
-		Matrix tmp(rhs);
-		tmp.swap(*this);
-	}
-	return (*this);
-}
+
+// ------ ACCESSORS -------
 
 void Matrix::swap(Matrix& other){
 	int ti = n;
@@ -113,6 +109,31 @@ void Matrix::set(int i, int j, int val){
 		throw std::out_of_range("i and j must be inside " + shape());
 	}
 	cols[j][i] = val;
+}
+
+bool Matrix::issquare() const{
+	return m == n;
+}
+
+bool Matrix::issymmetric() const{
+	// TODO: can divide and conquer by sub-matrix?
+	// TODO: better use of column-major structure?
+	for (int j = 0; j < n; j++){
+		for (int i = 0; i < m; i ++){
+			if (cols[i][j] != cols[j][i]) return false;
+		}
+	}
+	return true;
+}
+
+// ----- OPERATORS ------
+    
+Matrix& Matrix::operator=(const Matrix& rhs){
+	if (this != &rhs){
+		Matrix tmp(rhs);
+		tmp.swap(*this);
+	}
+	return (*this);
 }
 
 Matrix& Matrix::operator+=(const Matrix& rhs){
@@ -213,5 +234,28 @@ std::ostream& operator<<(std::ostream &os, Matrix &rhs) {
 	}
 	os << "]";
 	return os;
+}
+
+/**
+ * Transpose. Modifies current object. Use static Matrix.T(Matrix) to leave M unmodified.
+ */
+Matrix Matrix::T(){
+	// TODO: Can divide and conquer by sub-matrix?
+	Matrix tmp = Matrix(n, m);
+	for (int j = 0; j < n; j++){
+		for (int i = 0; i < m; i ++){
+			tmp.set(j, i, cols[j][i]);
+		}
+	}
+	tmp.swap(*this);
+	return (*this);
+}
+
+/**
+ * Returns transpose of argument. Leaves argument unmodified. Use member function Matrix.T() to modify object directly.
+ */
+Matrix Matrix::T(const Matrix& other){
+	Matrix copy = Matrix(other);
+	return copy.T();
 }
 

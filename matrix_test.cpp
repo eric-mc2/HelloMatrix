@@ -211,11 +211,10 @@ TEST_CASE("matrix multiplication operator"){
 	REQUIRE (c == (eye*c));
 	REQUIRE (c == (c*eye));
 	Matrix p({{0,1,0},{1,0,0},{0,0,1}});
-	Matrix d({{1,0,2},{2,4,6},{0,2,5}});
-	Matrix foo = (p*d);
-	std::cout << foo << "\n";
+	Matrix d({{4,2,6},{0,1,2},{2,0,5}});
+	Matrix e({{1,0,2},{2,4,6},{0,2,5}});
 	REQUIRE (c == p*d);
-	REQUIRE (c != d*p);
+	REQUIRE (c == e*p);
 }
 TEST_CASE("scalar multiplication operator"){
 	Matrix a(4,5);
@@ -289,5 +288,165 @@ TEST_CASE("inequality operator"){
 		c.set(1,1,1);
 		REQUIRE_FALSE(b!=c);
 		REQUIRE_FALSE(c!=b);
+	}
+}
+TEST_CASE("issquare"){
+	SECTION("yes"){
+		Matrix a(5,5);
+		REQUIRE(a.issquare());
+	}
+	SECTION("no"){
+		Matrix a(5,4);
+		REQUIRE_FALSE(a.issquare());
+	}
+}
+TEST_CASE("issymmetric"){
+	SECTION("one-by-one"){
+		Matrix a(1,1);
+		REQUIRE(a.issymmetric());
+	}
+	SECTION("rectangular"){
+		Matrix a(1,10);
+		REQUIRE_FALSE(a.issymmetric());
+	}
+	SECTION("diag") {
+		Matrix a {{1,0,0},{0,2,0},{0,0,3}};
+		REQUIRE(a.issymmetric());
+	}
+	SECTION("yes with even columns"){
+		Matrix a {{1,2,3,4},{2,1,5,6},{3,5,1,7},{4,6,7,1}};
+		REQUIRE(a.issymmetric());
+	}
+	SECTION("no with even columns"){
+		Matrix a {{1,2,3,4},{2,1,5,6},{4,6,7,1},{3,5,1,7}};
+		REQUIRE_FALSE(a.issymmetric());
+	}
+	SECTION("yes with odd columns"){
+		Matrix a {{1,2,3},{2,5,0},{3,0,7}};
+		REQUIRE(a.issymmetric());
+	}
+	SECTION("no with odd columns"){
+		Matrix a {{1,2,3},{3,0,7},{2,5,0}};
+		REQUIRE_FALSE(a.issymmetric());
+	}
+}
+TEST_CASE("member transpose"){
+	SECTION("even square") {
+		Matrix a {{1,2},{3,4}};
+		Matrix b {{1,3},{2,4}};
+		a.T();
+		REQUIRE(a == b);
+	}
+	SECTION("odd square"){
+		Matrix a {{1,2,3},{4,5,6},{7,8,9}};
+		Matrix b {{1,4,7},{2,5,8},{3,6,9}};
+		a.T();
+		REQUIRE(a == b);
+	}
+	SECTION("one-by-one"){
+		Matrix a {{8}};
+		Matrix b {{8}};
+		a.T();
+		REQUIRE(a == b);
+	}
+	SECTION("column vector"){
+		Matrix a {{1,2,3}};
+		Matrix b {{1},{2},{3}};
+		a.T();
+		REQUIRE(a == b);
+	}
+	SECTION("row vector"){
+		Matrix a {{1},{2},{3}};
+		Matrix b {{1,2,3}};
+		a.T();
+		REQUIRE(a == b);
+	}
+	SECTION("rectangle even rows even columns"){
+		Matrix a {{1,2},{3,4},{5,6},{7,8}};
+		Matrix b {{1,3,5,7},{2,4,6,8}};
+		a.T();
+		REQUIRE(a == b);
+	}
+	SECTION("rectangle even rows odd columns"){
+		Matrix a {{1,2},{3,4},{5,6}};
+		Matrix b {{1,3,5},{2,4,6}};
+		a.T();
+		REQUIRE(a == b);
+	}
+	SECTION("rectangle odd rows even columns"){
+		Matrix a {{1,2,3},{4,5,6},{7,8,9},{10,11,12}};
+		Matrix b {{1,4,7,10},{2,5,8,11},{3,6,9,12}};
+		a.T();
+		REQUIRE(a == b);
+	}
+	SECTION("rectangle odd rows odd columns"){
+		Matrix a {{1,2,3},{4,5,6},{7,8,9},{10,11,12},{13,14,15}};
+		Matrix b {{1,4,7,10,13},{2,5,8,11,14},{3,6,9,12,15}};
+		a.T();
+		REQUIRE(a == b);
+	}
+}
+TEST_CASE("static transpose"){
+	SECTION("even square") {
+		Matrix a {{1,2},{3,4}};
+		Matrix b {{1,3},{2,4}};
+		Matrix at = Matrix::T(a);
+		REQUIRE(at == b);
+		REQUIRE(at != a);
+	}
+	SECTION("odd square"){
+		Matrix a {{1,2,3},{4,5,6},{7,8,9}};
+		Matrix b {{1,4,7},{2,5,8},{3,6,9}};
+		Matrix at = Matrix::T(a);
+		REQUIRE(at == b);
+		REQUIRE(at != a);
+	}
+	SECTION("one-by-one"){
+		Matrix a {{8}};
+		Matrix b {{8}};
+		Matrix at = Matrix::T(a);
+		REQUIRE(at == b);
+	}
+	SECTION("column vector"){
+		Matrix a {{1,2,3}};
+		Matrix b {{1},{2},{3}};
+		Matrix at = Matrix::T(a);
+		REQUIRE(at == b);
+		REQUIRE(at != a);
+	}
+	SECTION("row vector"){
+		Matrix a {{1},{2},{3}};
+		Matrix b {{1,2,3}};
+		Matrix at = Matrix::T(a);
+		REQUIRE(at == b);
+		REQUIRE(at != a);
+	}
+	SECTION("rectangle even rows even columns"){
+		Matrix a {{1,2},{3,4},{5,6},{7,8}};
+		Matrix b {{1,3,5,7},{2,4,6,8}};
+		Matrix at = Matrix::T(a);
+		REQUIRE(at == b);
+		REQUIRE(at != a);
+	}
+	SECTION("rectangle even rows odd columns"){
+		Matrix a {{1,2},{3,4},{5,6}};
+		Matrix b {{1,3,5},{2,4,6}};
+		Matrix at = Matrix::T(a);
+		REQUIRE(at == b);
+		REQUIRE(at != a);
+	}
+	SECTION("rectangle odd rows even columns"){
+		Matrix a {{1,2,3},{4,5,6},{7,8,9},{10,11,12}};
+		Matrix b {{1,4,7,10},{2,5,8,11},{3,6,9,12}};
+		Matrix at = Matrix::T(a);
+		REQUIRE(at == b);
+		REQUIRE(at != a);
+	}
+	SECTION("rectangle odd rows odd columns"){
+		Matrix a {{1,2,3},{4,5,6},{7,8,9},{10,11,12},{13,14,15}};
+		Matrix b {{1,4,7,10,13},{2,5,8,11,14},{3,6,9,12,15}};
+		Matrix at = Matrix::T(a);
+		REQUIRE(at == b);
+		REQUIRE(at != a);
 	}
 }
